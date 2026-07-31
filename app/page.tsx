@@ -1,8 +1,8 @@
 
 export default function Home() {
   return (
-    <div>
+    <div className="text-3xl underline text-red-500">
       Home
-    </d>
+    </div>
   );
 }
