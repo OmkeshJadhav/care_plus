@@ -34,10 +34,10 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", fontMerriweather.variable, fontLora.variable, "font-sans", geist.variable)}
       suppressHydrationWarning
     >
-      <body className={cn('min-h-screen bg-dark-300 font-merriweather antialiased', fontMerriweather.variable)}>
+      <body className={cn('min-h-screen font-merriweather antialiased', fontMerriweather.variable)}>
         <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
