@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Merriweather, Lora, Geist } from "next/font/google";
 import "./globals.css";
 import {cn} from '@/lib/utils'
+import { ThemeProvider } from "@/components/theme-provider"
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -31,8 +32,18 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn("h-full", "antialiased", fontMerriweather.variable, fontLora.variable, "font-sans", geist.variable)}
+      suppressHydrationWarning
     >
-      <body className={cn('min-h-screen bg-dark-300 font-merriweather antialiased', fontMerriweather.variable)}>{children}</body>
+      <body className={cn('min-h-screen bg-dark-300 font-merriweather antialiased', fontMerriweather.variable)}>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
     </html>
   );
 }
