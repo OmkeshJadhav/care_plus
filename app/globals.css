@@ -1,53 +1,171 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* v3 darkMode: ["class"] equivalent */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ========================================== THEME (was tailwind.config.ts) */
+@theme {
+  --color-green-500: #24ae7c;
+  --color-green-600: #0d2a1f;
+
+  --color-blue-500: #79b5ec;
+  --color-blue-600: #152432;
+
+  --color-red-500: #f37877;
+  --color-red-600: #3e1716;
+  --color-red-700: #f24e43;
+
+  --color-light-200: #e8e9e9;
+
+  --color-dark-200: #0d0f10;
+  --color-dark-300: #131619;
+  --color-dark-400: #1a1d21;
+  --color-dark-500: #363a3d;
+  --color-dark-600: #76828d;
+  --color-dark-700: #abb8c4;
+
+  /* TODO: not present in your original tailwind.config.ts - placeholder values,
+     adjust to whatever you actually want .sidebar / .bg-image to look like */
+  --color-black-800: #131619;
+  --color-black-900: #0d0f10;
+
+  /* --font-sans is expected to be set by next/font (e.g. on <html>/<body>) */
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --background-image-appointments: url("/assets/images/appointments-bg.png");
+  --background-image-pending: url("/assets/images/pending-bg.png");
+  --background-image-cancelled: url("/assets/images/cancelled-bg.png");
+
+  /* TODO: not present in your original tailwind.config.ts either - point this
+     at a real asset (e.g. /assets/images/light-rays.png) or remove bg-light-rays
+     from the .bg-image class below */
+  --background-image-light-rays: url("/assets/images/light-rays.png");
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
 
+@keyframes caret-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
+}
 
-@layer base {
-  /* Remove scrollbar */
-  .remove-scrollbar::-webkit-scrollbar {
+/* ========================================== CUSTOM UTILITIES
+   These must use @utility (not @layer) because they are @apply'd
+   from OTHER classes below (e.g. .sidebar applies remove-scrollbar,
+   .header applies text-32-bold). In Tailwind v4, only real utilities
+   -- built-in or @utility-defined -- can be targets of @apply. */
+
+@utility remove-scrollbar {
+  &::-webkit-scrollbar {
     width: 0px;
     height: 0px;
     border-radius: 0px;
   }
 
-  .remove-scrollbar::-webkit-scrollbar-track {
+  &::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .remove-scrollbar::-webkit-scrollbar-thumb {
+  &::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 0px;
   }
 
-  .remove-scrollbar::-webkit-scrollbar-thumb:hover {
-    /* background: #1e2238; */
+  &::-webkit-scrollbar-thumb:hover {
     background: transparent;
   }
 }
+
+@utility text-36-bold {
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 700;
+}
+
+@utility text-32-bold {
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+@utility text-24-bold {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+@utility text-18-bold {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+@utility text-16-semibold {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+@utility text-16-regular {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+@utility text-14-medium {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+@utility text-14-regular {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+}
+
+@utility text-12-regular {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+@utility text-12-semibold {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+/* ========================================== TAILWIND STYLES */
 
 @layer utilities {
   /* ===== UTILITIES */
@@ -79,6 +197,7 @@ body {
     @apply text-18-bold md:text-24-bold;
   }
 
+  /* Custom .container overrides Tailwind's built-in container utility (same as v3 behavior) */
   .container {
     @apply relative flex-1 overflow-y-auto px-[5%];
   }
@@ -128,7 +247,7 @@ body {
 
   /* ==== File Upload */
   .file-upload {
-    @apply text-12-regular flex cursor-pointer  flex-col items-center justify-center gap-3 rounded-md border border-dashed border-dark-500 bg-dark-400 p-5;
+    @apply text-12-regular flex cursor-pointer flex-col items-center justify-center gap-3 rounded-md border border-dashed border-dark-500 bg-dark-400 p-5;
   }
 
   .file-upload_label {
@@ -163,140 +282,98 @@ body {
     @apply flex items-center justify-between;
   }
 
-  /* ===== TYPOGRAPHY */
-  .text-36-bold {
-    @apply text-[36px] leading-10 font-bold;
-  }
-
-  .text-24-bold {
-    @apply text-[24px] leading-7 font-bold;
-  }
-
-  .text-32-bold {
-    @apply text-[32px] leading-9 font-bold;
-  }
-
-  .text-18-bold {
-    @apply text-[18px] leading-6 font-bold;
-  }
-
-  .text-16-semibold {
-    @apply text-[16px] leading-5 font-semibold;
-  }
-
-  .text-16-regular {
-    @apply text-[16px] leading-5 font-normal;
-  }
-
-  .text-14-medium {
-    @apply text-[14px] leading-4.5 font-medium;
-  }
-
-  .text-14-regular {
-    @apply text-[14px] leading-4.5 font-normal;
-  }
-
-  .text-12-regular {
-    @apply text-[12px] leading-4 font-normal;
-  }
-
-  .text-12-semibold {
-    @apply text-[12px] leading-4 font-semibold;
-  }
-
-  /* =====  SHADCN OVERRIDES */
   .shad-primary-btn {
-    @apply bg-green-500 text-white !important;
+    @apply bg-green-500! text-white!;
   }
 
   .shad-danger-btn {
-    @apply bg-red-700 text-white !important;
+    @apply bg-red-700! text-white!;
   }
 
   .shad-gray-btn {
-    @apply border border-dark-500 cursor-pointer bg-dark-400 text-white !important;
+    @apply border! border-dark-500! cursor-pointer! bg-dark-400! text-white!;
   }
 
   .shad-input-label {
-    @apply text-14-medium text-dark-700 !important;
+    @apply text-14-medium! text-dark-700!;
   }
 
   .shad-input {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply bg-dark-400! placeholder:text-dark-600! border-dark-500! h-11! focus-visible:ring-0! focus-visible:ring-offset-0!;
   }
 
   .shad-input-icon {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply bg-dark-400! placeholder:text-dark-600! border-dark-500! h-11! focus-visible:ring-0! focus-visible:ring-offset-0!;
   }
 
   .shad-textArea {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply bg-dark-400! placeholder:text-dark-600! border-dark-500! focus-visible:ring-0! focus-visible:ring-offset-0!;
   }
 
   .shad-combobox-item {
-    @apply data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 !important;
+    @apply data-[disabled=true]:pointer-events-none! data-[disabled=true]:opacity-50!;
   }
 
   .shad-combobox-trigger {
-    @apply h-11 !important;
+    @apply h-11!;
   }
 
   .shad-select-trigger {
-    @apply bg-dark-400  placeholder:text-dark-600 border-dark-500 h-11 focus:ring-0 focus:ring-offset-0 !important;
+    @apply bg-dark-400! placeholder:text-dark-600! border-dark-500! h-11! focus:ring-0! focus:ring-offset-0!;
   }
 
   .shad-select-content {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply bg-dark-400! border-dark-500!;
   }
 
   .shad-dialog {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply bg-dark-400! border-dark-500!;
   }
 
   .shad-dialog button {
-    @apply focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
+    @apply focus:ring-0! focus:ring-offset-0! focus-visible:border-none! focus-visible:outline-none! focus-visible:ring-transparent! focus-visible:ring-offset-0!;
   }
 
   .shad-error {
-    @apply text-red-400 !important;
+    @apply text-red-400!;
   }
 
   .shad-table {
-    @apply rounded-lg overflow-hidden !important;
+    @apply rounded-lg! overflow-hidden!;
   }
 
   .shad-table-row-header {
-    @apply border-b border-dark-400 text-light-200 hover:bg-transparent !important;
+    @apply border-b! border-dark-400! text-light-200! hover:bg-transparent!;
   }
 
   .shad-table-row {
-    @apply border-b border-dark-400 text-light-200 !important;
+    @apply border-b! border-dark-400! text-light-200!;
   }
 
   .shad-otp {
-    @apply w-full flex justify-between !important;
+    @apply w-full! flex! justify-between!;
   }
 
   .shad-otp-slot {
-    @apply text-36-bold justify-center flex border border-dark-500 rounded-lg size-16 gap-4 !important;
+    @apply text-36-bold! justify-center! flex! border! border-dark-500! rounded-lg! size-16! gap-4!;
   }
 
   .shad-alert-dialog {
-    @apply space-y-5 bg-dark-400 border-dark-500 outline-none !important;
+    @apply space-y-5! bg-dark-400! border-dark-500! outline-none!;
   }
 
   .shad-sheet-content button {
-    @apply top-2 focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
+    @apply top-2! focus:ring-0! focus:ring-offset-0! focus-visible:border-none! focus-visible:outline-none! focus-visible:ring-transparent! focus-visible:ring-offset-0!;
   }
 
   /* =====  REACT PHONE NUMBER INPUT OVERRIDES */
   .input-phone {
-    @apply mt-2 h-11 rounded-md px-3 text-sm border bg-dark-400 placeholder:text-dark-600 border-dark-500 !important;
+    @apply mt-2! h-11! rounded-md! px-3! text-sm! border! bg-dark-400! placeholder:text-dark-600! border-dark-500!;
   }
 
   /* =====  REACT DATE PICKER OVERRIDES */
   .date-picker {
-    @apply overflow-hidden border-transparent w-full placeholder:text-dark-600  h-11 text-14-medium rounded-md px-3 outline-none !important;
+    @apply overflow-hidden! border-transparent! w-full! placeholder:text-dark-600! h-11! text-14-medium! rounded-md! px-3! outline-none!;
   }
 }
 

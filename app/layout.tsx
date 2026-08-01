@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Merriweather, Lora } from "next/font/google";
+import { Merriweather, Lora, Geist } from "next/font/google";
 import "./globals.css";
 import {cn} from '@/lib/utils'
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const fontMerriweather = Merriweather({
   variable: "--font-merriweather",
@@ -28,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontMerriweather.variable} ${fontLora.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", fontMerriweather.variable, fontLora.variable, "font-sans", geist.variable)}
     >
       <body className={cn('min-h-screen bg-dark-300 font-merriweather antialiased', fontMerriweather.variable)}>{children}</body>
     </html>
